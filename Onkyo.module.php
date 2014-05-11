@@ -8,7 +8,7 @@ class Onkyo implements iModule {
         'start' => '15:44:6D',
         'start-on-vcr-dvr' => '15:44:6A:02',
         'select-vcr-dvr' => '15:44:69:02',
-        'stop' => '15:44:69:02'
+        'stop' => '15:44:6C'
 //15:45 - At end of each button press command to prevent repeated keypresses
 //15:44:01 - Up / Tuner Freq Up
 //15:44:02 - Down / Tuner Freq Down
@@ -50,9 +50,11 @@ class Onkyo implements iModule {
         if (!array_key_exists($command, $this->commands)) {
             die("Unknown command " . $command);
         }
+        $exec = "/bin/echo 'tx " . $this->commands[$command] . "' | /usr/local/bin/cec-client -s -d 1";
         $result;
         $return;
-        exec("/bin/echo 'tx " . $this->commands[$command] . "' | /usr/local/bin/cec-client -s -d 1", $result, $return);
+        exec($exec, $result, $return);
+        print_r($exec);
         print_r($result);
         print_r($return);
     }
