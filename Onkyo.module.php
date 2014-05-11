@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * This class allows control of some Onkyo equipment (tested with TX-SR313) via HDMI CEC. It supposes that you have installed libcec and have access to the command cec-client.
+ */
 class Onkyo implements iModule {
 
     private $commands = array(
@@ -46,9 +48,13 @@ class Onkyo implements iModule {
 
     public function execute($command) {
         if (!array_key_exists($command, $this->commands)) {
-            die("Unknown command " + $command);
+            die("Unknown command " . $command);
         }
-        exec("echo 'tx " + $this->commands[$command] + "' | cec-client -s -d 1");
+        $result;
+        $return;
+        exec("/bin/echo 'tx " . $this->commands[$command] . "' | /usr/local/bin/cec-client -s -d 1", $result, $return);
+        print_r($result);
+        print_r($return);
     }
 
 }
